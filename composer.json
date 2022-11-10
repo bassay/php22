@@ -12,5 +12,7 @@
             "name": "bassay"
         }
     ],
-    "require": {}
+    "require": {
+        "fakerphp/faker": "^1.20"
+    }
 }
