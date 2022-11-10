@@ -1,0 +1,16 @@
+{
+    "name": "bassa/php2",
+    "description": "home work for GB",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Bassa\\Php2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "bassay"
+        }
+    ],
+    "require": {}
+}
