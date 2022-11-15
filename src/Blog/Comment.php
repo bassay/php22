@@ -5,58 +5,56 @@ use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\Post;
 
 class Comment {
-
+  /**
+   * @param \Bassa\Php2\Blog\UUID $uuid
+   * @param \Bassa\Php2\Blog\User $user
+   * @param \Bassa\Php2\Blog\Post $post
+   * @param string $text
+   */
   public function __construct(
-    private int    $id,
+    private UUID   $uuid,
     private User   $user,
     private Post   $post,
     private string $text
   ) {
-    $this->id = $id;
+    $this->uuid = $uuid;
     $this->user = $user;
     $this->post = $post;
     $this->text = $text;
   }
 
   /**
-   * @return int
+   * @return \Bassa\Php2\Blog\UUID
    */
-  public function getId(): int {
-    return $this->id;
-  }
-
-  /**
-   * @param int $id
-   */
-  public function setId(int $id): void {
-    $this->id = $id;
+  public function getUuid(): UUID {
+    return $this->uuid;
   }
 
   /**
    * @return \Bassa\Php2\Blog\User
    */
-  public function getUser(): User {
+  public function getUser(): \Bassa\Php2\Blog\User {
     return $this->user;
   }
 
   /**
    * @param \Bassa\Php2\Blog\User $user
    */
-  public function setUser(User $user): void {
+  public function setUser(\Bassa\Php2\Blog\User $user): void {
     $this->user = $user;
   }
 
   /**
    * @return \Bassa\Php2\Blog\Post
    */
-  public function getPost(): Post {
+  public function getPost(): \Bassa\Php2\Blog\Post {
     return $this->post;
   }
 
   /**
    * @param \Bassa\Php2\Blog\Post $post
    */
-  public function setPost(Post $post): void {
+  public function setPost(\Bassa\Php2\Blog\Post $post): void {
     $this->post = $post;
   }
 
@@ -75,10 +73,10 @@ class Comment {
   }
 
 
+
   public function __toString(): string {
     return "Коммент ID_comment: $this->id , User: " .
-      $this->getUser
-    () . " , Для поста: " . $this->getPost() . ", С тектом $this->text" .
+      $this->getUser() . " , Для поста: " . $this->getPost() . ", С тектом $this->text" .
       PHP_EOL;
   }
 

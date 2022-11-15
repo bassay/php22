@@ -6,32 +6,39 @@ use Bassa\Php2\Person\Name;
 
 class User
 {
-  private int $id;
+  private UUID $uuid;
   private Name $username;
   private string $login;
 
   /**
-   * @param int $id
+   * @param \Bassa\Php2\Blog\UUID $id
    * @param \Bassa\Php2\Person\Name $username
-   * @param string $login
+   * @param string|null $login
    */
-  public function __construct(int $id, Name $username, string $login) {
-    $this->id = $id;
+  public function __construct(UUID $uuid, Name $username, ?string $login="guest") {
+    $this->uuid = $uuid;
     $this->username = $username;
+    // $this->login = (string)($login . rand(1, 999)); // пришлось сделать
+    // Бубен, так в БД уникальные записи должны быть
     $this->login = $login;
   }
 
-  /**
-   * @return int
-   */
-  public function getId(): int {
-    return $this->id;
+//  /**
+//   * @return int
+//   */
+//  public function id(): int {
+//    return $this->id;
+//  }
+
+  public function uuid(): UUID
+  {
+    return $this->uuid;
   }
 
   /**
    * @return \Bassa\Php2\Person\Name
    */
-  public function getUsername(): Name {
+  public function name(): Name {
     return $this->username;
   }
 
@@ -45,7 +52,7 @@ class User
   /**
    * @return string
    */
-  public function getLogin(): string {
+  public function username(): string {
     return $this->login;
   }
 
@@ -60,7 +67,7 @@ class User
    * @return string
    */
   public function __toString() : string {
-    return "Юзер $this->id c именем $this->username и логином $this->login" .
+    return "Юзер $this->username и логином $this->login" .
       PHP_EOL;
   }
 
