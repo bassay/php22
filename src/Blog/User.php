@@ -6,30 +6,17 @@ use Bassa\Php2\Person\Name;
 
 class User
 {
-  private UUID $uuid;
-  private Name $username;
-  private string $login;
-
   /**
    * @param \Bassa\Php2\Blog\UUID $id
    * @param \Bassa\Php2\Person\Name $username
    * @param string|null $login
    */
-  public function __construct(UUID $uuid, Name $username, ?string $login="guest") {
-    $this->uuid = $uuid;
-    $this->username = $username;
+  public function __construct(private UUID $uuid, private Name $username,
+                              private ?string $login="guest") {
+
     // $this->login = (string)($login . rand(1, 999)); // пришлось сделать
     // Бубен, так в БД уникальные записи должны быть
-    $this->login = $login;
   }
-
-//  /**
-//   * @return int
-//   */
-//  public function id(): int {
-//    return $this->id;
-//  }
-
   public function uuid(): UUID
   {
     return $this->uuid;
