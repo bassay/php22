@@ -4,41 +4,43 @@ namespace Bassa\Php2\Person;
 
 class Name {
 
-  public function __construct(private string $firstName, private string $lastName
+  public function __construct(private string $first, private string $last
   ) {
   }
 
   /**
    * @return string
    */
-  public function getFirstName(): string {
-    return $this->firstName;
+  public function first(): string {
+    return $this->first;
   }
 
   /**
-   * @param string $firstName
+   * @param string $first
    */
-  public function setFirstName(string $firstName): void {
-    $this->firstName = $firstName;
+  public function setFirst(string $first): void {
+    $this->first = $first;
   }
 
   /**
    * @return string
    */
-  public function getLastName(): string {
-    return $this->lastName;
+  public function last(): string {
+    return $this->last;
   }
 
   /**
-   * @param string $lastName
+   * @param string $last
    */
-  public function setLastName(string $lastName): void {
-    $this->lastName = $lastName;
+  public function setLast(string $last): void {
+    $this->last = $last;
   }
 
-
+  /**
+   * @return string
+   */
   public function __toString() {
-    return $this->firstName . ' ' . $this->lastName;
+    return $this->first . ' ' . $this->last;
   }
 
 }
