@@ -14,7 +14,6 @@ class Request {
   ) {
   }
 
-
   // Метод для получения пути запроса
   // Напрмер, для http://example.com/some/page?x=1&y=acb
   // путём будет строка '/some/page'
