@@ -7,12 +7,13 @@ use Bassa\Php2\Blog\Post;
 use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
 use Bassa\Php2\Person\Name;
-use PDO;
+use \PDO;
 
 class SqlitePostRepository implements PostsRepositoryInterface {
 
+
   /**
-   * @param \Bassa\Php2\Blog\Repositories\PostsRepository\PDO $connection
+   * @param \PDO $connection
    */
   public function __construct(private PDO $connection) {
     $this->connection = $this->connection;

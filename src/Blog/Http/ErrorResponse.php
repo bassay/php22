@@ -14,6 +14,8 @@ class ErrorResponse extends Response {
   // родительского класса
   protected function payload(): array
   {
+//    var_dump($this->reason);
+//    die();
     return ['reason' => $this->reason];
   }
 }

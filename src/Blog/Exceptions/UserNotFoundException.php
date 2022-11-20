@@ -1,6 +1,6 @@
 <?php
 
-namespace Bassa\Php2\Blog\Repositories\UsersRepository;
+namespace Bassa\Php2\Blog\Exceptions;
 
 use Bassa\Php2\Blog\Exceptions\AppException;
 

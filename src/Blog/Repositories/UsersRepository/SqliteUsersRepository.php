@@ -2,6 +2,7 @@
 
 namespace Bassa\Php2\Blog\Repositories\UsersRepository;
 
+use Bassa\Php2\Blog\Exceptions\UserNotFoundException;
 use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
 use Bassa\Php2\Person\Name;
@@ -29,8 +30,11 @@ VALUES (:uuid, :username, :first_name, :last_name)'
   // Также добавим метод для получения
   // пользователя по его UUID
   /**
+   * @param \Bassa\Php2\Blog\UUID $uuid
+   *
+   * @return \Bassa\Php2\Blog\User
    * @throws \Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException
-   * @throws \Bassa\Php2\Blog\Repositories\UsersRepository\UserNotFoundException
+   * @throws \Bassa\Php2\Blog\Exceptions\UserNotFoundException
    */
   public function get(UUID $uuid): User {
 
@@ -59,7 +63,7 @@ VALUES (:uuid, :username, :first_name, :last_name)'
    *
    * @return \Bassa\Php2\Blog\User
    * @throws \Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException
-   * @throws \Bassa\Php2\Blog\Repositories\UsersRepository\UserNotFoundException
+   * @throws \Bassa\Php2\Blog\Exceptions\UserNotFoundException
    */
   public function getByUsername(string $username): User {
     $statement = $this->connection->prepare(
@@ -79,7 +83,7 @@ VALUES (:uuid, :username, :first_name, :last_name)'
    *
    * @return \Bassa\Php2\Blog\User
    * @throws \Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException
-   * @throws \Bassa\Php2\Blog\Repositories\UsersRepository\UserNotFoundException
+   * @throws \Bassa\Php2\Blog\Exceptions\UserNotFoundException
    */
   private function getUser(PDOStatement $statement, string $username): User {
 

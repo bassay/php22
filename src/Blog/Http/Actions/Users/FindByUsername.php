@@ -2,16 +2,17 @@
 
 namespace Bassa\Php2\Blog\Http\Actions\Users;
 
+use Bassa\Php2\Blog\Exceptions\HttpException;
 use Bassa\Php2\Blog\Http\Actions\ActionInterface;
 use Bassa\Php2\Blog\Http\ErrorResponse;
-use Bassa\Php2\Blog\Http\HttpException;
 use Bassa\Php2\Blog\Http\Request;
 use Bassa\Php2\Blog\Http\Response;
 use Bassa\Php2\Blog\Http\SuccessfulResponse;
-use Bassa\Php2\Blog\Repositories\UsersRepository\UserNotFoundException;
+use Bassa\Php2\Blog\Exceptions\UserNotFoundException;
 use Bassa\Php2\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
 
 class FindByUsername implements ActionInterface {
+
   // Нам понадобится репозиторий пользователей,
   // внедряем его контракт в качестве зависимости
   public function __construct(
