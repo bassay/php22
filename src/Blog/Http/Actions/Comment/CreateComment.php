@@ -1,40 +1,46 @@
 <?php
 
-namespace Bassa\Php2\Blog\Http\Actions\Post;
+namespace Bassa\Php2\Blog\Http\Actions\Comment;
 
+//POST http://127.0.0.1:8000/posts/comment
+//{
+//  "author_uuid": "<UUID>",
+//"post_uuid": "<UUID>",
+//"text": "<TEXT>",
+//}
+
+// тестовые данные:
+// 1. uuid поста* 2. Текст коммента* 3. uuid_author не обязательно
 
 use Bassa\Php2\Blog\Exceptions\HttpException;
 use Bassa\Php2\Blog\Exceptions\UserNotFoundException;
 use Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException;
-use Bassa\Php2\Blog\Http\Actions\ActionInterface;
 use Bassa\Php2\Blog\Http\ErrorResponse;
 use Bassa\Php2\Blog\Http\Request;
 use Bassa\Php2\Blog\Http\Response;
-use Bassa\Php2\Blog\Http\SuccessfulResponse;
-use Bassa\Php2\Blog\Post;
+use Bassa\Php2\Blog\Repositories\CommentsRepository\CommentsRepositoryInterface;
 use Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use Bassa\Php2\Blog\Repositories\UsersRepository\usersRepositoryInterface;
 use Bassa\Php2\Blog\UUID;
 
-class CreatePost implements ActionInterface {
+class CreateComment {
 
-  // Внедряем репозитории статей и пользователей
+  /**
+   * @param \Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface $postsRepository
+   * @param \Bassa\Php2\Blog\Repositories\UsersRepository\usersRepositoryInterface $usersRepository
+   * @param \Bassa\Php2\Blog\Repositories\CommentsRepository\CommentsRepositoryInterface $commentsRepository
+   */
   public function __construct(
     private PostsRepositoryInterface $postsRepository,
     private UsersRepositoryInterface $usersRepository,
+    private CommentsRepositoryInterface $commentsRepository
   ) {
   }
-
-  /**
-   * @param \Bassa\Php2\Blog\Http\Request $request
-   *
-   * @return \Bassa\Php2\Blog\Http\ErrorResponse|\Bassa\Php2\Blog\Http\SuccessfulResponse
-   * @throws \Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException
-   */
 
   public function handle(Request $request): Response {
     try {
       $authorUuid = new UUID($request->jsonBodyField('author_uuid'));
+      $postUuid = new UUID($request->jsonBodyField('post_uuid'));
     } catch (HttpException|InvalidArgumentException $e) {
       return new ErrorResponse($e->getMessage());
     }
@@ -44,21 +50,16 @@ class CreatePost implements ActionInterface {
     } catch (UserNotFoundException $e) {
       return new ErrorResponse($e->getMessage());
     }
-    $newPostUuid = UUID::random();
     try {
-      $post = new Post(
-        $newPostUuid,
-        $author,
-        $request->jsonBodyField('title'),
-        $request->jsonBodyField('text'),
-      );
-    } catch (HttpException $e) {
+      $post = $this->postsRepository->get($postUuid);
+    } catch (UserNotFoundException $e) {
       return new ErrorResponse($e->getMessage());
     }
-    $this->postsRepository->save($post);
-    return new SuccessfulResponse([
-      'uuid' => (string) $newPostUuid,
-    ]);
+
+    // к этому моменту мы имеем ггшв автора и поста
+
+    $newCommentUuid = UUID::random();
   }
+
 
 }

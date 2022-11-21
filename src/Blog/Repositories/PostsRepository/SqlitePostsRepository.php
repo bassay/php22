@@ -9,7 +9,7 @@ use Bassa\Php2\Blog\UUID;
 use Bassa\Php2\Person\Name;
 use \PDO;
 
-class SqlitePostRepository implements PostsRepositoryInterface {
+class SqlitePostsRepository implements PostsRepositoryInterface {
 
 
   /**

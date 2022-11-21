@@ -9,9 +9,11 @@ class Post {
    * @param string $title
    * @param string $text
    */
-  public function __construct(private $uuid, private User $user, private string $title,
-                              private string $text) {
-
+  public function __construct(
+    private UUID $uuid,
+    private User $user,
+    private string $title,
+    private string $text) {
   }
 
   /**

@@ -9,86 +9,90 @@ class Request {
 
   public function __construct(
     // аргумент, соответствующий суперглобальной переменной $_GET
-    private array $get,
+    private array  $get,
     // аргумент, соответствующий суперглобальной переменной $_SERVER
-    private array $server,
+    private array  $server,
     // Добавляем свойство для хранения тела запроса
     private string $body
   ) {
   }
 
-// Метод для получения пути запроса
-// Напрмер, для http://example.com/some/page?x=1&y=acb
-// путём будет строка '/some/page'
-public
-function path(): string {
-  // В суперглобальном массиве $_SERVER
-  // значение URI хранится под ключом REQUEST_URI
-  if (!array_key_exists('REQUEST_URI', $this->server)) {
-    // Если мы не можем получить URI - бросаем исключение
-    throw new HttpException('Cannot get path from the request');
+  /**
+   * @return mixed
+   */
+  public function getBody(): mixed {
+    return $this->body;
   }
-  // Используем встроенную в PHP функцию parse_url
-  $components = parse_url($this->server['REQUEST_URI']);
-  if (!is_array($components) || !array_key_exists('path', $components)) {
-    // Если мы не можем получить путь - бросаем исключение
-    throw new HttpException('Cannot get path from the request');
-  }
-  return $components['path'];
-}
 
-// Метод для получения значения
-// определённого параметра строки запроса
-// Напрмер, для http://example.com/some/page?x=1&y=acb
-// значением параметра x будет строка '1'
-public
-function query(string $param): string {
-  if (!array_key_exists($param, $this->get)) {
-    // Если нет такого параметра в запросе - бросаем исключение
-    throw new HttpException(
-      "No such query param in the request: $param"
-    );
+  // Метод для получения пути запроса
+  // Напрмер, для http://example.com/some/page?x=1&y=acb
+  // путём будет строка '/some/page'
+  public function path(): string {
+    // В суперглобальном массиве $_SERVER
+    // значение URI хранится под ключом REQUEST_URI
+    if (!array_key_exists('REQUEST_URI', $this->server)) {
+      // Если мы не можем получить URI - бросаем исключение
+      throw new HttpException('Cannot get path from the request');
+    }
+    // Используем встроенную в PHP функцию parse_url
+    $components = parse_url($this->server['REQUEST_URI']);
+    if (!is_array($components) || !array_key_exists('path', $components)) {
+      // Если мы не можем получить путь - бросаем исключение
+      throw new HttpException('Cannot get path from the request');
+    }
+    return $components['path'];
   }
-  $value = trim($this->get[$param]);
-  if (empty($value)) {
-    // Если значение параметра пусто - бросаем исключение
-    throw new HttpException(
-      "Empty query param in the request: $param"
-    );
-  }
-  return $value;
-}
 
-// Метод для получения значения
-// определённого заголовка
-public function header(string $header): string {
-  // В суперглобальном массиве $_SERVER
-  // имена заголовков имеют префикс 'HTTP_',
-  // а знаки подчёркивания заменены на минусы
-  $headerName = mb_strtoupper("http_" . str_replace('-', '_', $header));
-  if (!array_key_exists($headerName, $this->server)) {
-    // Если нет такого заголовка - бросаем исключение
-    throw new HttpException("No such header in the request: $header");
+  // Метод для получения значения
+  // определённого параметра строки запроса
+  // Напрмер, для http://example.com/some/page?x=1&y=acb
+  // значением параметра x будет строка '1'
+  public function query(string $param): string {
+    if (!array_key_exists($param, $this->get)) {
+      // Если нет такого параметра в запросе - бросаем исключение
+      throw new HttpException(
+        "No such query param in the request: $param"
+      );
+    }
+    $value = trim($this->get[$param]);
+    if (empty($value)) {
+      // Если значение параметра пусто - бросаем исключение
+      throw new HttpException(
+        "Empty query param in the request: $param"
+      );
+    }
+    return $value;
   }
-  $value = trim($this->server[$headerName]);
-  if (empty($value)) {
-    // Если значение заголовка пусто - бросаем исключение
-    throw new HttpException("Empty header in the request: $header");
+
+  // Метод для получения значения
+  // определённого заголовка
+  public function header(string $header): string {
+    // В суперглобальном массиве $_SERVER
+    // имена заголовков имеют префикс 'HTTP_',
+    // а знаки подчёркивания заменены на минусы
+    $headerName = mb_strtoupper("http_" . str_replace('-', '_', $header));
+    if (!array_key_exists($headerName, $this->server)) {
+      // Если нет такого заголовка - бросаем исключение
+      throw new HttpException("No such header in the request: $header");
+    }
+    $value = trim($this->server[$headerName]);
+    if (empty($value)) {
+      // Если значение заголовка пусто - бросаем исключение
+      throw new HttpException("Empty header in the request: $header");
+    }
+    return $value;
   }
-  return $value;
-}
 
   // Метод для получения массива,
   // сформированного из json-форматированного
   // тела запроса
-  public function jsonBody(): array
-  {
+  public function jsonBody(): array {
     try {
       // Пытаемся декодировать json
       $data = json_decode(
         $this->body,
         // Декодируем в ассоциативный массив
-        associative: true,
+        associative: TRUE,
         // Бросаем исключение при ошибке
         flags: JSON_THROW_ON_ERROR
       );
@@ -109,8 +113,7 @@ public function header(string $header): string {
    * @return mixed
    * @throws \Bassa\Php2\Blog\Exceptions\HttpException
    */
-  public function jsonBodyField(string $field): mixed
-  {
+  public function jsonBodyField(string $field): mixed {
     $data = $this->jsonBody();
     if (!array_key_exists($field, $data)) {
       throw new HttpException("No such field: $field");
@@ -121,8 +124,7 @@ public function header(string $header): string {
     return $data[$field];
   }
 
-  public function method(): string
-  {
+  public function method(): string {
     // В суперглобальном массиве $_SERVER
     // HTTP-метод хранится под ключом REQUEST_METHOD
     if (!array_key_exists('REQUEST_METHOD', $this->server)) {

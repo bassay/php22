@@ -1,7 +1,7 @@
 <?php
 use Bassa\Php2\Blog\Post;
 use Bassa\Php2\Blog\Repositories\CommentsRepository\SqliteCommentsRepository;
-use Bassa\Php2\Blog\Repositories\PostsRepository\SqlitePostRepository;
+use Bassa\Php2\Blog\Repositories\PostsRepository\SqlitePostsRepository;
 use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
 use Bassa\Php2\Person\Name;
@@ -14,7 +14,7 @@ $faker = Faker\Factory::create('ru_RU');
 
 //Создаём объект подключения к SQLite
 $connection = new PDO('sqlite:' . __DIR__ . '/blog.sqlite');
-$postsRepository = new SqlitePostRepository($connection);
+$postsRepository = new SqlitePostsRepository($connection);
 
 // Создаем объект USER
 $user = new User(UUID::random(), new Name('Bass', 'Rus'), "admin2");
