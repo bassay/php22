@@ -31,6 +31,7 @@ class FindByUuid implements ActionInterface {
     } catch (PostNotFoundException $e) {
       return new ErrorResponse($e->getMessage());
     }
+
     return new SuccessfulResponse([
       'title' => $post->getTitle(),
       'text' => $post->getText(),
