@@ -17,10 +17,6 @@ class Comment {
     private Post   $post,
     private string $text
   ) {
-    $this->uuid = $uuid;
-    $this->user = $user;
-    $this->post = $post;
-    $this->text = $text;
   }
 
   /**
