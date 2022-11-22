@@ -4,8 +4,6 @@
 
 namespace Bassa\Php2\Blog\Http\Actions\Post;
 
-use Bassa\Php2\Blog\Exceptions\AppException;
-use Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException;
 use Bassa\Php2\Blog\Http\Actions\ActionInterface;
 use Bassa\Php2\Blog\Http\Request;
 use Bassa\Php2\Blog\Http\Response;
