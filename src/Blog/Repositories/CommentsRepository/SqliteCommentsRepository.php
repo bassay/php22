@@ -66,6 +66,5 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface {
       ),
       $result['text']
     );
-
   }
 }
