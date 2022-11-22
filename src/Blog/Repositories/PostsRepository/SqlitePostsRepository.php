@@ -7,18 +7,15 @@ use Bassa\Php2\Blog\Post;
 use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
 use Bassa\Php2\Person\Name;
-use \PDO;
+use PDO;
 
 class SqlitePostsRepository implements PostsRepositoryInterface {
-
 
   /**
    * @param \PDO $connection
    */
   public function __construct(private PDO $connection) {
-    $this->connection = $this->connection;
   }
-
 
   /**
    * @param \Bassa\Php2\Blog\Post $post
@@ -41,6 +38,24 @@ class SqlitePostsRepository implements PostsRepositoryInterface {
 
   }
 
+  public function delete(UUID $postUuid): int {
+    // 'DELETE FROM posts WHERE uuid = :uuid'
+    $statement = $this->connection->prepare(
+      'DELETE FROM posts WHERE uuid = :uuid'
+    );
+    $statement->execute([':uuid' => $postUuid]);
+
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+    // сделать проверку, иначе выкинуть предупреждение
+    if ($result === FALSE) {
+      throw new PostNotFoundException(
+        "Сannot be deleted: $postUuid"
+      );
+    }
+
+    return 1;
+  }
 
   /**
    * @param \Bassa\Php2\Blog\UUID $uuid

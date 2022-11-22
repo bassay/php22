@@ -34,16 +34,24 @@ $comment = new Comment(
   'test text comment'
 );
 
+try {
+  $postsRepository->delete(
+    new UUID('2facc892-4fd8-4b4b-a21d-761b4b9d732f')
+  );
+} catch (\Bassa\Php2\Blog\Exceptions\PostNotFoundException $e) {
+  echo $e->getMessage();
+}
+
 //var_dump($comment);
 
 // инициализирует репозиторий SqliteCommentsRepository
 $commentRepository = new SqliteCommentsRepository($connection);
 // сохранияем комент
-$commentRepository->save($comment);
+//$commentRepository->save($comment);
 
-$uuid_comment = new UUID('093f8ddb-ad61-427a-b439-34ada5aa414a');
+//$uuid_comment = new UUID('093f8ddb-ad61-427a-b439-34ada5aa414a');
 // получаем коммент
-$commet = $commentRepository->get($uuid_comment);
-echo $comment->getText();
+//$commet = $commentRepository->get($uuid_comment);
+//echo $comment->getText();
 //var_dump();
 

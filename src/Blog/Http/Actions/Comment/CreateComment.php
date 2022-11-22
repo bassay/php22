@@ -12,12 +12,15 @@ namespace Bassa\Php2\Blog\Http\Actions\Comment;
 // тестовые данные:
 // 1. uuid поста* 2. Текст коммента* 3. uuid_author не обязательно
 
+use Bassa\Php2\Blog\Comment;
 use Bassa\Php2\Blog\Exceptions\HttpException;
+use Bassa\Php2\Blog\Exceptions\PostNotFoundException;
 use Bassa\Php2\Blog\Exceptions\UserNotFoundException;
 use Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException;
 use Bassa\Php2\Blog\Http\ErrorResponse;
 use Bassa\Php2\Blog\Http\Request;
 use Bassa\Php2\Blog\Http\Response;
+use Bassa\Php2\Blog\Http\SuccessfulResponse;
 use Bassa\Php2\Blog\Repositories\CommentsRepository\CommentsRepositoryInterface;
 use Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use Bassa\Php2\Blog\Repositories\UsersRepository\usersRepositoryInterface;
@@ -31,13 +34,14 @@ class CreateComment {
    * @param \Bassa\Php2\Blog\Repositories\CommentsRepository\CommentsRepositoryInterface $commentsRepository
    */
   public function __construct(
-    private PostsRepositoryInterface $postsRepository,
-    private UsersRepositoryInterface $usersRepository,
+    private PostsRepositoryInterface    $postsRepository,
+    private UsersRepositoryInterface    $usersRepository,
     private CommentsRepositoryInterface $commentsRepository
   ) {
   }
 
   public function handle(Request $request): Response {
+
     try {
       $authorUuid = new UUID($request->jsonBodyField('author_uuid'));
       $postUuid = new UUID($request->jsonBodyField('post_uuid'));
@@ -45,20 +49,36 @@ class CreateComment {
       return new ErrorResponse($e->getMessage());
     }
 
+
     try {
       $author = $this->usersRepository->get($authorUuid);
     } catch (UserNotFoundException $e) {
       return new ErrorResponse($e->getMessage());
     }
+
     try {
       $post = $this->postsRepository->get($postUuid);
-    } catch (UserNotFoundException $e) {
+    } catch (PostNotFoundException $e) {
+      return new ErrorResponse($e->getMessage());
+    }
+    $newCommentUuid = UUID::random();
+
+    try {
+      $comment = new Comment(
+        $newCommentUuid,
+        $author,
+        $post,
+        $request->jsonBodyField('text'),
+      );
+    } catch (HttpException $e) {
       return new ErrorResponse($e->getMessage());
     }
 
-    // к этому моменту мы имеем ггшв автора и поста
+    $this->commentsRepository->save($comment);
 
-    $newCommentUuid = UUID::random();
+    return new SuccessfulResponse(
+      ['uuid' => (string) $newCommentUuid]
+    );
   }
 
 

@@ -103,6 +103,11 @@ $routes = [
       )
     ),
   ],
+  'DELETE' => [
+    '/http.php/posts' => new DeletePost(
+
+    ),
+  ],
 ];
 
 

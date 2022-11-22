@@ -24,8 +24,6 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface {
       'INSERT INTO comments (uuid, author_uuid, post_uuid, text)
                 VALUES (:uuid, :author_uuid, :post_uuid, :text)'
     );
-//    var_dump($comment->getUuid());
-//    die();
 
     $statement->execute([
       ':uuid' => $comment->getUuid(),
@@ -33,7 +31,6 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface {
       ':post_uuid' => $comment->getPost()->uuid(),
       ':text' => $comment->getText(),
     ]);
-
   }
 
   /**
