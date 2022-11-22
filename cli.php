@@ -17,9 +17,15 @@ $connection = new PDO('sqlite:' . __DIR__ . '/blog.sqlite');
 $postsRepository = new SqlitePostsRepository($connection);
 
 // Создаем объект USER
-$user = new User(UUID::random(), new Name('Bass', 'Rus'), "admin2");
+$user = new User(UUID::random(), new Name($faker->firstName, $faker->lastName), "admin");
 // Создаем объект Post
-$post = new Post(UUID::random(), $user, 'test title', 'test text' );
+//$post = new Post(UUID::random(), $user, "test title $i", $faker->realText );
+
+//for ($i=0 ; $i<10 ; $i++){
+//  $post = new Post(UUID::random(), $user, "test title $i", $faker->realText );
+//  $postsRepository->save($post);
+//}
+
 // реализация метода save()
 //$postsRepository->save($post);
 
@@ -34,13 +40,13 @@ $comment = new Comment(
   'test text comment'
 );
 
-try {
-  $postsRepository->delete(
-    new UUID('2facc892-4fd8-4b4b-a21d-761b4b9d732f')
-  );
-} catch (\Bassa\Php2\Blog\Exceptions\PostNotFoundException $e) {
-  echo $e->getMessage();
-}
+//try {
+//  $postsRepository->delete(
+//    new UUID('2facc892-4fd8-4b4b-a21d-761b4b9d732f')
+//  );
+//} catch (\Bassa\Php2\Blog\Exceptions\PostNotFoundException $e) {
+//  echo $e->getMessage();
+//}
 
 //var_dump($comment);
 

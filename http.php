@@ -39,6 +39,7 @@ ini_set("allow_url_fopen", true);
 use Bassa\Php2\Blog\Exceptions\AppException;
 use Bassa\Php2\Blog\Exceptions\HttpException;
 use Bassa\Php2\Blog\Http\Actions\Post\CreatePost;
+use Bassa\Php2\Blog\Http\Actions\Post\DeletePost;
 use Bassa\Php2\Blog\Http\Actions\Post\FindByUuid;
 use Bassa\Php2\Blog\Http\Actions\Users\FindByUsername;
 use Bassa\Php2\Blog\Http\ErrorResponse;
@@ -103,9 +104,12 @@ $routes = [
       )
     ),
   ],
+
   'DELETE' => [
     '/http.php/posts' => new DeletePost(
-
+      new SqlitePostsRepository(
+        new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
+      ),
     ),
   ],
 ];
