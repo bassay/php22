@@ -11,6 +11,7 @@ use Bassa\Php2\Blog\Http\SuccessfulResponse;
 use Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use Bassa\Php2\Blog\UUID;
 
+
 class DeletePost implements ActionInterface {
 
   /**
