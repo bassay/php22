@@ -9,7 +9,7 @@ use Bassa\Php2\Person\Name;
 use PDO;
 use PDOStatement;
 
-class SqliteUsersRepository implements usersRepositoryInterface {
+class SqliteUsersRepository implements UsersRepositoryInterface {
 
   public function __construct(private PDO $connection) {
   }

@@ -4,7 +4,7 @@ namespace Bassa\Php2\Blog\Commands;
 
 use Bassa\Php2\Person\Name;
 use Bassa\Php2\Blog\Repositories\UsersRepository\UserNotFoundException;
-use Bassa\Php2\Blog\Repositories\UsersRepository\usersRepositoryInterface;
+use Bassa\Php2\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
 use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
 
@@ -13,7 +13,7 @@ class CreateUserCommand {
   // Команда зависит от контракта репозитория пользователей,
   // а не от конкретной реализации
   public function __construct(
-    private usersRepositoryInterface $usersRepository
+    private UsersRepositoryInterface $usersRepository
   ) {
   }
 

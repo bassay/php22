@@ -6,7 +6,7 @@ namespace Bassa\Php2\Blog\Repositories\UsersRepository;
 use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
 
-class InMemoryUsersRepository implements usersRepositoryInterface {
+class InMemoryUsersRepository implements UsersRepositoryInterface {
 
   /**
    * @var User[]

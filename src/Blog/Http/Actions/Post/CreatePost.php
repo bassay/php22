@@ -13,7 +13,7 @@ use Bassa\Php2\Blog\Http\Response;
 use Bassa\Php2\Blog\Http\SuccessfulResponse;
 use Bassa\Php2\Blog\Post;
 use Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
-use Bassa\Php2\Blog\Repositories\UsersRepository\usersRepositoryInterface;
+use Bassa\Php2\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
 use Bassa\Php2\Blog\UUID;
 
 class CreatePost implements ActionInterface {
