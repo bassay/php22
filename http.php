@@ -2,7 +2,9 @@
 //Cookie: XDEBUG_SESSION=start
 
 use Bassa\Php2\Blog\Exceptions\AppException;
+use Bassa\Php2\Blog\Http\Actions\Comment\CreateComment;
 use Bassa\Php2\Blog\Http\Actions\Post\CreatePost;
+use Bassa\Php2\Blog\Http\Actions\Post\DeletePost;
 use Bassa\Php2\Blog\Http\Actions\Post\FindByUuid;
 use Bassa\Php2\Blog\Http\Actions\Users\FindByUsername;
 use Bassa\Php2\Blog\Http\ErrorResponse;
@@ -173,6 +175,10 @@ $routes = [
   ],
   'POST' => [
     '/http.php/posts/create' => CreatePost::class,
+    '/http.php/posts/comment' => CreateComment::class,
+  ],
+  'DELETE' => [
+    '/http.php/posts' => DeletePost::class,
   ],
 ];
 if (!array_key_exists($method, $routes)) {

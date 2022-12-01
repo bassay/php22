@@ -12,3 +12,17 @@ Cookie: XDEBUG_SESSION=start
 
 ** Тестовая машина у меня OpenServer, я просто не стал алиас домена делать, 
 из за этого такое в роутах!
+
+**Текущие роуты**
+
+    'GET'
+        '/http.php/users/show' => FindByUsername::class,
+        '/http.php/posts/show' => FindByUuid::class,
+
+    'POST'
+        '/http.php/posts/create' => CreatePost::class,
+        '/http.php/posts/comment' => CreateComment::class,
+    
+    'DELETE'
+        '/http.php/posts' => DeletePost::class,
+     
