@@ -172,10 +172,12 @@ $routes = [
   'GET' => [
     '/http.php/users/show' => FindByUsername::class,
     '/http.php/posts/show' => FindByUuid::class,
+    '/http.php/like/show' => FindByUuid::class,
   ],
   'POST' => [
     '/http.php/posts/create' => CreatePost::class,
-    '/http.php/posts/comment' => CreateComment::class,
+    '/http.php/comment/create' => CreateComment::class,
+    '/http.php/like/create' => CreateComment::class,
   ],
   'DELETE' => [
     '/http.php/posts' => DeletePost::class,
