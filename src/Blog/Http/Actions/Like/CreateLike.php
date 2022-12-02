@@ -55,12 +55,13 @@ class CreateLike implements ActionInterface {
     } catch (PostNotFoundException $e) {
       return new ErrorResponse($e->getMessage());
     }
-
-    $res = $this->likesRepository->checkLikeFromUser(user: $author, post:
-      $post);
     // выше дублирование кода, пока не могу понять как быть. Это копия экшина
     // Коммента
 
+    $res = $this->likesRepository->checkLikeFromUser(
+      user: $author,
+      post: $post
+    );
     // Проверка на Установленный лайк Пост + Юзер
     if ($res == 1 ) {
       return new ErrorResponse("like is already installed");
