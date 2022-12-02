@@ -8,7 +8,7 @@ use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
 use Bassa\Php2\Person\Name;
 use PDO;
-use PDOStatement;
+//use PDOStatement;
 
 class SqlitePostsRepository implements PostsRepositoryInterface {
 
