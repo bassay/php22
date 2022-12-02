@@ -41,7 +41,7 @@ $container->bind(
   SqliteCommentsRepository::class
 );
 
-// 5. репозиторий пользователей
+// 5. репозиторий Лайков
 $container->bind(
   LikesRepositoryInterface::class,
   SqliteLikesRepository::class

@@ -169,19 +169,16 @@ try {
   return;
 }
 
-//var_dump($path); die();
-// Ассоциируем маршруты с именами классов действий,
-// вместо готовых объектов
 $routes = [
   'GET' => [
     '/http.php/users/show' => FindByUsername::class,
     '/http.php/posts/show' => FindByUuid::class,
-    '/http.php/like/show' => FindLikeByUuid::class, // тут
+    '/http.php/like/show' => FindLikeByUuid::class,
   ],
   'POST' => [
     '/http.php/posts/create' => CreatePost::class,
     '/http.php/comment/create' => CreateComment::class,
-    '/http.php/like/create' => CreateLike::class, // тут
+    '/http.php/like/create' => CreateLike::class,
   ],
   'DELETE' => [
     '/http.php/posts' => DeletePost::class,
@@ -195,10 +192,8 @@ if (!array_key_exists($path, $routes[$method])) {
   (new ErrorResponse("Route not found: $method $path"))->send();
   return;
 }
-// Получаем имя класса действия для маршрута
+
 $actionClassName = $routes[$method][$path];
-// С помощью контейнера
-// создаём объект нужного действия
 
 $action = $container->get($actionClassName);
 
