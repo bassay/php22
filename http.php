@@ -3,6 +3,8 @@
 
 use Bassa\Php2\Blog\Exceptions\AppException;
 use Bassa\Php2\Blog\Http\Actions\Comment\CreateComment;
+use Bassa\Php2\Blog\Http\Actions\Like\CreateLike;
+use Bassa\Php2\Blog\Http\Actions\Like\FindLikeByUuid;
 use Bassa\Php2\Blog\Http\Actions\Post\CreatePost;
 use Bassa\Php2\Blog\Http\Actions\Post\DeletePost;
 use Bassa\Php2\Blog\Http\Actions\Post\FindByUuid;
@@ -166,18 +168,20 @@ try {
   (new ErrorResponse)->send();
   return;
 }
+
+//var_dump($path); die();
 // Ассоциируем маршруты с именами классов действий,
 // вместо готовых объектов
 $routes = [
   'GET' => [
     '/http.php/users/show' => FindByUsername::class,
     '/http.php/posts/show' => FindByUuid::class,
-    '/http.php/like/show' => FindByUuid::class,
+    '/http.php/like/show' => FindLikeByUuid::class, // тут
   ],
   'POST' => [
     '/http.php/posts/create' => CreatePost::class,
     '/http.php/comment/create' => CreateComment::class,
-    '/http.php/like/create' => CreateComment::class,
+    '/http.php/like/create' => CreateLike::class, // тут
   ],
   'DELETE' => [
     '/http.php/posts' => DeletePost::class,
@@ -203,4 +207,7 @@ try {
 } catch (AppException $e) {
   (new ErrorResponse($e->getMessage()))->send();
 }
-$response->send();
+
+if (isset($response)){
+  $response->send();
+}

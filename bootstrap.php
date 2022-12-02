@@ -2,6 +2,10 @@
 
 // Подключаем автозагрузчик Composer
 use Bassa\Php2\Blog\Container\DIContainer;
+use Bassa\Php2\Blog\Repositories\CommentsRepository\CommentsRepositoryInterface;
+use Bassa\Php2\Blog\Repositories\CommentsRepository\SqliteCommentsRepository;
+use Bassa\Php2\Blog\Repositories\LikesRepository\LikesRepositoryInterface;
+use Bassa\Php2\Blog\Repositories\LikesRepository\SqliteLikesRepository;
 use Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use Bassa\Php2\Blog\Repositories\PostsRepository\SqlitePostsRepository;
 use Bassa\Php2\Blog\Repositories\UsersRepository\SqliteUsersRepository;
@@ -28,6 +32,19 @@ $container->bind(
 $container->bind(
   UsersRepositoryInterface::class,
   SqliteUsersRepository::class
+);
+
+
+// 4. репозиторий Комментариев
+$container->bind(
+  CommentsRepositoryInterface::class,
+  SqliteCommentsRepository::class
+);
+
+// 5. репозиторий пользователей
+$container->bind(
+  LikesRepositoryInterface::class,
+  SqliteLikesRepository::class
 );
 // Возвращаем объект контейнера
 return $container;

@@ -65,9 +65,9 @@ $like = new Like(
 $sqliteLikeRepository = new SqliteLikesRepository($sql);
 //$sqliteLikeRepository->save($like);
 $like = $sqliteLikeRepository
-  ->getByPostUuid(new UUID('e227c462-ac8b-49e1-8790-6de938b873d6'));
-
-
-echo "<pre>";
-var_dump($like);
-echo "</pre>";
+  ->getByLikeUuid(new UUID('e227c462-ac8b-49e1-8790-6de938b873d6'));
+//
+//
+//echo "<pre>";
+//var_dump($like);
+//echo "</pre>";
