@@ -11,11 +11,13 @@ use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
 use PDO;
 use PDOStatement;
+use Psr\Log\LoggerInterface;
 
 class SqliteLikesRepository implements LikesRepositoryInterface {
 
 
-  public function __construct(private PDO $connection) {
+  public function __construct(private PDO $connection, private
+  LoggerInterface $logger) {
   }
 
   /**
@@ -33,6 +35,7 @@ class SqliteLikesRepository implements LikesRepositoryInterface {
       ':author_uuid' => $like->getAuthorUuid()->uuid(),
       ':post_uuid' => $like->getPostUuid()->uuid(),
     ]);
+    $this->logger->info('Like create ' . $like->getUuid());
   }
 
   /**
@@ -75,6 +78,7 @@ class SqliteLikesRepository implements LikesRepositoryInterface {
     $result = $statement->fetch(PDO::FETCH_ASSOC);
 
     if (!is_array($result)) {
+      $this->logger->warning("Не существующий UUID объекта Like" . $uuid);
       throw new LikeNotFound("uuid like not found");
     }
 

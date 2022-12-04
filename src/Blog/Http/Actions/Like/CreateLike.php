@@ -15,7 +15,6 @@ use Bassa\Php2\Blog\Repositories\LikesRepository\LikesRepositoryInterface;
 use Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use Bassa\Php2\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
 use Bassa\Php2\Blog\UUID;
-use Psr\Log\LoggerInterface;
 
 class CreateLike implements ActionInterface {
 
@@ -23,13 +22,11 @@ class CreateLike implements ActionInterface {
    * @param \Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface $postsRepository
    * @param \Bassa\Php2\Blog\Repositories\UsersRepository\UsersRepositoryInterface $usersRepository
    * @param \Bassa\Php2\Blog\Repositories\LikesRepository\LikesRepositoryInterface $likesRepository
-   * @param \Psr\Log\LoggerInterface $logger
    */
   public function __construct(
     private PostsRepositoryInterface    $postsRepository,
     private UsersRepositoryInterface    $usersRepository,
-    private LikesRepositoryInterface    $likesRepository,
-    private LoggerInterface $logger
+    private LikesRepositoryInterface    $likesRepository
   ) {
   }
 
@@ -82,9 +79,6 @@ class CreateLike implements ActionInterface {
       return new ErrorResponse($e->getMessage());
     }
     $this->likesRepository->save($like);
-
-    // Логируем UUID нового Лайка
-    $this->logger->info("Like created: $newLikeUuid");
 
     return new SuccessfulResponse(
       ['uuid' => (string) $newLikeUuid]

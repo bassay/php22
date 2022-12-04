@@ -8,9 +8,13 @@ use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
 use Bassa\Php2\Person\Name;
 use PDO;
+use Psr\Log\LoggerInterface;
 
 class SqliteCommentsRepository implements CommentsRepositoryInterface {
-  public function __construct(private PDO $connection) {
+  public function __construct(
+    private PDO $connection,
+    private LoggerInterface $logger
+  ) {
   }
 
 
@@ -31,6 +35,7 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface {
       ':post_uuid' => $comment->getPost()->uuid(),
       ':text' => $comment->getText(),
     ]);
+    $this->logger->info("Create Comment: " . $comment->getUuid());
   }
 
   /**
@@ -45,6 +50,7 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface {
 
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     if (FALSE === $result) {
+      $this->logger->warning("Comment not found: " . $uuid);
       throw new CommentNotFoundException(
         "Cannot get Comment: $uuid"
       );
