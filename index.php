@@ -43,6 +43,7 @@ use Bassa\Php2\Blog\UUID;
 // мы их можем получить через запрос
 //var_dump(new Like());
 
+$container = require __DIR__ . '/bootstrap.php';
 $sql = new PDO("sqlite:" . __DIR__ . "/blog.sqlite");
 
 $sqlitePostRepository = new SqlitePostsRepository($sql);

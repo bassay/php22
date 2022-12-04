@@ -13,15 +13,27 @@ use Bassa\Php2\Blog\Http\Response;
 use Bassa\Php2\Blog\Http\SuccessfulResponse;
 use Bassa\Php2\Blog\Post;
 use Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
-use Bassa\Php2\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
 use Bassa\Php2\Blog\UUID;
+use Bassa\Php2\Http\Auth\IdentificationInterface;
+use Psr\Log\LoggerInterface;
 
 class CreatePost implements ActionInterface {
 
   // Внедряем репозитории статей и пользователей
+
+  /**
+   * @param \Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface $postsRepository
+   * @param \Bassa\Php2\Http\Auth\IdentificationInterface $identification
+   * @param \Psr\Log\LoggerInterface $logger
+   */
   public function __construct(
     private PostsRepositoryInterface $postsRepository,
-    private UsersRepositoryInterface $usersRepository,
+//    private UsersRepositoryInterface $usersRepository,
+    // Вместо контракта репозитория пользователей
+    // внедряем контракт идентификации
+    private IdentificationInterface $identification,
+    // Внедряем контракт логгера
+    private LoggerInterface $logger,
   ) {
   }
 
@@ -33,22 +45,28 @@ class CreatePost implements ActionInterface {
    */
 
   public function handle(Request $request): Response {
+    // Идентифицируем пользователя -
+    // автора статьи
+    $author = $this->identification->user($request);
+
+    $newPostUuid = UUID::random();
+
     try {
       $authorUuid = new UUID($request->jsonBodyField('author_uuid'));
     } catch (HttpException|InvalidArgumentException $e) {
       return new ErrorResponse($e->getMessage());
     }
 
-    try {
-      $author = $this->usersRepository->get($authorUuid);
-    } catch (UserNotFoundException $e) {
-      return new ErrorResponse($e->getMessage());
-    }
-    $newPostUuid = UUID::random();
+//    try {
+//      $author = $this->usersRepository->get($authorUuid);
+//    } catch (UserNotFoundException $e) {
+//      return new ErrorResponse($e->getMessage());
+//    }
+
     try {
       $post = new Post(
         $newPostUuid,
-        $author,
+        $author->uuid(),
         $request->jsonBodyField('title'),
         $request->jsonBodyField('text'),
       );
@@ -56,6 +74,10 @@ class CreatePost implements ActionInterface {
       return new ErrorResponse($e->getMessage());
     }
     $this->postsRepository->save($post);
+
+    // Логируем UUID новой статьи
+    $this->logger->info("Post created: $newPostUuid");
+
     return new SuccessfulResponse([
       'uuid' => (string) $newPostUuid,
     ]);

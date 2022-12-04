@@ -4,21 +4,21 @@ namespace Bassa\Php2\Blog;
 
 use Bassa\Php2\Person\Name;
 
-class User
-{
+class User {
+
   /**
    * @param \Bassa\Php2\Blog\UUID $id
    * @param \Bassa\Php2\Person\Name $username
    * @param string|null $login
    */
-  public function __construct(private UUID $uuid, private Name $username,
-                              private ?string $login="guest") {
-
-    // $this->login = (string)($login . rand(1, 999)); // пришлось сделать
-    // Бубен, так в БД уникальные записи должны быть
+  public function __construct(
+    private UUID    $uuid,
+    private Name    $username,
+    private ?string $login = "guest") {
   }
-  public function uuid(): UUID
-  {
+
+
+  public function uuid(): UUID {
     return $this->uuid;
   }
 
@@ -53,11 +53,10 @@ class User
   /**
    * @return string
    */
-  public function __toString() : string {
+  public function __toString(): string {
     return "Юзер $this->username и логином $this->login" .
       PHP_EOL;
   }
-
 
 
 }
