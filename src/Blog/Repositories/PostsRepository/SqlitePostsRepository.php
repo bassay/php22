@@ -80,7 +80,7 @@ class SqlitePostsRepository implements PostsRepositoryInterface {
     $result = $statement->fetch(PDO::FETCH_ASSOC);
 
     if (FALSE === $result) {
-      $this->logger->warning("Не существующий UUID объекта Post" . $uuid);
+      $this->logger->warning("Не существующий UUID объекта Post " . $uuid);
       throw new PostNotFoundException(
         "Cannot get POST: $uuid"
       );

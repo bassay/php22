@@ -78,7 +78,7 @@ class SqliteLikesRepository implements LikesRepositoryInterface {
     $result = $statement->fetch(PDO::FETCH_ASSOC);
 
     if (!is_array($result)) {
-      $this->logger->warning("Не существующий UUID объекта Like" . $uuid);
+      $this->logger->warning("Не существующий UUID объекта Like " . $uuid);
       throw new LikeNotFound("uuid like not found");
     }
 

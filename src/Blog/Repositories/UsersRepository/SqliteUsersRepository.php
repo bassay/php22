@@ -54,7 +54,7 @@ VALUES (:uuid, :username, :first_name, :last_name)'
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     // Бросаем исключение, если пользователь не найден
     if (FALSE === $result) {
-      $this->logger->warning("Не существующий UUID объекта User" . $uuid);
+      $this->logger->warning("Не существующий UUID объекта User " . $uuid);
       throw new UserNotFoundException(
         "Cannot get user: $uuid"
       );
