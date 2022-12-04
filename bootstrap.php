@@ -9,6 +9,8 @@ use Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use Bassa\Php2\Blog\Repositories\PostsRepository\SqlitePostsRepository;
 use Bassa\Php2\Blog\Repositories\UsersRepository\SqliteUsersRepository;
 use Bassa\Php2\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
+use Bassa\Php2\Http\Auth\IdentificationInterface;
+use Bassa\Php2\Http\Auth\JsonBodyUuidIdentification;
 use Dotenv\Dotenv;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -67,6 +69,11 @@ if ('yes' === $_SERVER['LOG_TO_FILES']) {
       __DIR__ . '/logs/blog.log'
     ))
     ->pushHandler(new StreamHandler(
+      __DIR__ . '/logs/blog.warning.log',
+      level: Logger::WARNING,
+      bubble: FALSE,
+    ))
+    ->pushHandler(new StreamHandler(
       __DIR__ . '/logs/blog.error.log',
       level: Logger::ERROR,
       bubble: FALSE,
@@ -92,26 +99,5 @@ $container->bind(
   IdentificationInterface::class,
   JsonBodyUuidIdentification::class
 );
-
-// 6. Логгер monolog
-//$container->bind(
-//  LoggerInterface::class,
-//  // .. ассоциируем объект логгера из библиотеки monolog
-//  (new Logger('blog'))
-//    ->pushHandler(new StreamHandler(
-//      __DIR__ . '/logs/blog.log' // Путь до этого файла
-//    ))
-//    ->pushHandler(new StreamHandler(
-//    // записывать в файл "blog.error.log"
-//      __DIR__ . '/logs/blog.error.log',
-//      // события с уровнем ERROR и выше,
-//      level: Logger::ERROR,
-//      // при этом событие не должно "всплывать"
-//      bubble: FALSE,
-//    ))
-//    ->pushHandler(
-//      new StreamHandler("php://stdout")
-//    )
-//);
 
 return $container;

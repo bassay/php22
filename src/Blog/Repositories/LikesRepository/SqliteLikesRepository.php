@@ -2,6 +2,7 @@
 
 namespace Bassa\Php2\Blog\Repositories\LikesRepository;
 
+use Bassa\Php2\Blog\Exceptions\LikeNotFound;
 use Bassa\Php2\Blog\Like;
 use Bassa\Php2\Blog\Post;
 use Bassa\Php2\Blog\Repositories\PostsRepository\SqlitePostsRepository;
@@ -71,10 +72,12 @@ class SqliteLikesRepository implements LikesRepositoryInterface {
       'SELECT * FROM post_likes WHERE uuid = :uuid'
     );
     $statement->execute([':uuid' => $uuid]);
-
     $result = $statement->fetch(PDO::FETCH_ASSOC);
 
-    // как правильно сделать не знаю, нужна подсказка
+    if (!is_array($result)) {
+      throw new LikeNotFound("uuid like not found");
+    }
+
     $user = new SqliteUsersRepository($this->connection);
     $user = $user->get(new UUID($result['author_uuid']));
 

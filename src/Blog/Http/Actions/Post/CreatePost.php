@@ -33,7 +33,7 @@ class CreatePost implements ActionInterface {
     // внедряем контракт идентификации
     private IdentificationInterface $identification,
     // Внедряем контракт логгера
-    private LoggerInterface $logger,
+    private LoggerInterface $logger
   ) {
   }
 
@@ -73,6 +73,7 @@ class CreatePost implements ActionInterface {
     } catch (HttpException $e) {
       return new ErrorResponse($e->getMessage());
     }
+
     $this->postsRepository->save($post);
 
     // Логируем UUID новой статьи

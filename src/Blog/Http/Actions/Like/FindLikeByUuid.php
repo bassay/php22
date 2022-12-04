@@ -3,6 +3,7 @@
 namespace Bassa\Php2\Blog\Http\Actions\Like;
 
 use Bassa\Php2\Blog\Exceptions\HttpException;
+use Bassa\Php2\Blog\Exceptions\LikeNotFound;
 use Bassa\Php2\Blog\Http\Actions\ActionInterface;
 use Bassa\Php2\Blog\Http\ErrorResponse;
 use Bassa\Php2\Blog\Http\Request;
@@ -10,6 +11,7 @@ use Bassa\Php2\Blog\Http\Response;
 use Bassa\Php2\Blog\Http\SuccessfulResponse;
 use Bassa\Php2\Blog\Repositories\LikesRepository\LikesRepositoryInterface;
 use Bassa\Php2\Blog\UUID;
+use Psr\Log\LoggerInterface;
 
 class FindLikeByUuid implements ActionInterface {
 
@@ -17,7 +19,8 @@ class FindLikeByUuid implements ActionInterface {
    * @param \Bassa\Php2\Blog\Repositories\LikesRepository\LikesRepositoryInterface $likesRepository
    */
   public function __construct(
-    private LikesRepositoryInterface $likesRepository
+    private LikesRepositoryInterface $likesRepository,
+    private LoggerInterface $logger
   ) {
   }
 
@@ -25,15 +28,17 @@ class FindLikeByUuid implements ActionInterface {
     try {
       $likeUuid = $request->query('uuid');
     } catch (HttpException $e) {
+      $likeUuid = $request->query('uuid');
+      $this->logger->warning("Invalid format UUID:  $likeUuid");
       return new ErrorResponse($e->getMessage());
     }
 
     try {
       $like = $this->likesRepository->getByLikeUuid(new UUID($likeUuid));
-    } catch (ErrorResponse $e) {
+    } catch (LikeNotFound $e) {
+      $this->logger->warning("Like::class - Object not found:  $likeUuid");
       return new ErrorResponse($e->getMessage());
     }
-    //    var_dump((string)$like->getPostUuid()->uuid()); die();
 
     return new SuccessfulResponse([
       'uuid' => $likeUuid,

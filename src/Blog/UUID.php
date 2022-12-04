@@ -1,12 +1,10 @@
 <?php
 
 namespace Bassa\Php2\Blog;
-use  Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException;;
+
+use Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException;
 
 class UUID {
-
-  // Внутри объекта мы храним UUID как строку
-
   /**
    * @throws \Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException
    */
@@ -25,6 +23,7 @@ class UUID {
   }
 
   // А так мы можем сгенерировать новый случайный UUID
+
   /**
    * @throws \Bassa\Php2\Blog\Exceptions\UUID\InvalidArgumentException
    */

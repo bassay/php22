@@ -26,6 +26,7 @@ use Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use Bassa\Php2\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
 use Bassa\Php2\Blog\UUID;
 use Bassa\Php2\Blog\Http\Actions\ActionInterface;
+use Psr\Log\LoggerInterface;
 
 class CreateComment implements ActionInterface {
 
@@ -33,11 +34,13 @@ class CreateComment implements ActionInterface {
    * @param \Bassa\Php2\Blog\Repositories\PostsRepository\PostsRepositoryInterface $postsRepository
    * @param \Bassa\Php2\Blog\Repositories\UsersRepository\UsersRepositoryInterface $usersRepository
    * @param \Bassa\Php2\Blog\Repositories\CommentsRepository\CommentsRepositoryInterface $commentsRepository
+   * @param \Psr\Log\LoggerInterface $logger
    */
   public function __construct(
     private PostsRepositoryInterface    $postsRepository,
     private UsersRepositoryInterface    $usersRepository,
-    private CommentsRepositoryInterface $commentsRepository
+    private CommentsRepositoryInterface $commentsRepository,
+    private LoggerInterface $logger
   ) {
   }
 
@@ -76,6 +79,9 @@ class CreateComment implements ActionInterface {
     }
 
     $this->commentsRepository->save($comment);
+
+    // Логируем UUID новой Коммента
+    $this->logger->info("Comment created: $newCommentUuid");
 
     return new SuccessfulResponse(
       ['uuid' => (string) $newCommentUuid]
