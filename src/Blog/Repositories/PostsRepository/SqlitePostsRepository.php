@@ -8,14 +8,19 @@ use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
 use Bassa\Php2\Person\Name;
 use PDO;
-use PDOStatement;
+use Psr\Log\LoggerInterface;
+
+//use PDOStatement;
 
 class SqlitePostsRepository implements PostsRepositoryInterface {
 
   /**
    * @param \PDO $connection
    */
-  public function __construct(private PDO $connection) {
+  public function __construct(
+    private PDO $connection,
+    private LoggerInterface $logger
+  ) {
   }
 
   /**
@@ -36,6 +41,9 @@ class SqlitePostsRepository implements PostsRepositoryInterface {
       ':title' => $post->getTitle(),
       ':text' => $post->getText(),
     ]);
+
+    // Логируем UUID нового Поста
+    $this->logger->info("Post created: " . $post->uuid());
 
   }
 
@@ -70,7 +78,9 @@ class SqlitePostsRepository implements PostsRepositoryInterface {
     $statement->execute([':uuid' => $uuid]);
 
     $result = $statement->fetch(PDO::FETCH_ASSOC);
+
     if (FALSE === $result) {
+      $this->logger->warning("Не существующий UUID объекта Post" . $uuid);
       throw new PostNotFoundException(
         "Cannot get POST: $uuid"
       );

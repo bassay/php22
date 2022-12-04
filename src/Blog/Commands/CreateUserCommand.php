@@ -2,59 +2,49 @@
 
 namespace Bassa\Php2\Blog\Commands;
 
+use Bassa\Php2\Blog\Exceptions\CommandException;
+use Bassa\Php2\Blog\Exceptions\UserNotFoundException;
 use Bassa\Php2\Person\Name;
-use Bassa\Php2\Blog\Repositories\UsersRepository\UserNotFoundException;
-use Bassa\Php2\Blog\Repositories\UsersRepository\usersRepositoryInterface;
+use Bassa\Php2\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
 use Bassa\Php2\Blog\User;
 use Bassa\Php2\Blog\UUID;
+use Psr\Log\LoggerInterface;
 
 class CreateUserCommand {
 
   // Команда зависит от контракта репозитория пользователей,
   // а не от конкретной реализации
   public function __construct(
-    private usersRepositoryInterface $usersRepository
+    private UsersRepositoryInterface $usersRepository,
+    private LoggerInterface $logger
   ) {
   }
 
-  public function handle(array $rawInput): void {
-    $input = $this->parseRawInput($rawInput);
-    $username = $input['username'];
-    // Проверяем, существует ли пользователь в репозитории
+  public function handle(Arguments $arguments): void
+  {
+    // Логируем информацию о том, что команда запущена
+    // Уровень логирования – INFO
+//    var_dump($arguments); die();
+    $this->logger->info("Create user command started");
+    $username = $arguments->get('username');
     if ($this->userExists($username)) {
-      // Бросаем исключение, если пользователь уже существует
-      throw new CommandException("User already exists: $username");
+      // Логируем сообщение с уровнем WARNING
+      $this->logger->warning("User already exists: $username");
+      // Вместо выбрасывания исключения просто выходим из функции
+      return;
     }
-    // Сохраняем пользователя в репозиторий
+    $uuid = UUID::random();
     $this->usersRepository->save(new User(
-      UUID::random(),
-      $username,
-      new Name($input['first_name'], $input['last_name'])
+      uuid: $uuid,
+      username: new Name(
+        $arguments->get('first_name'),
+        $arguments->get('last_name')
+      ),
+      login: $username
     ));
+    // Логируем информацию о новом пользователе
+    $this->logger->info("User created: $uuid");
   }
-  // Преобразуем входной массив
-  // из предопределённой переменной $argv
-  //
-  // array(4) {
-  // [0]=>
-  // string(18) "/some/path/cli.php"
-  // [1]=>
-  // string(13) "username=ivan"
-  // [2]=>
-  // string(15) "first_name=Ivan"
-  // [3]=>
-  // string(17) "last_name=Nikitin"
-  // }
-  //
-  // в ассоциативный массив вида
-  // array(3) {
-  // ["username"]=>
-  // string(4) "ivan"
-  // ["first_name"]=>
-  // string(4) "Ivan"
-  // ["last_name"]=>
-  // string(7) "Nikitin"
-  //}
   private function parseRawInput(array $rawInput): array {
     $input = [];
     foreach ($rawInput as $argument) {

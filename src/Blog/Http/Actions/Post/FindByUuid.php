@@ -21,11 +21,14 @@ class FindByUuid implements ActionInterface {
   }
 
   public function handle(Request $request): Response {
+
     try {
       $postUuid = $request->query('uuid');
     } catch (HttpException $e) {
+      $likeUuid = $request->query('uuid');
       return new ErrorResponse($e->getMessage());
     }
+
     try {
       $post = $this->postRepository->get(new UUID($postUuid));
     } catch (PostNotFoundException $e) {

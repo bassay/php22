@@ -88,6 +88,7 @@ class Request {
   // тела запроса
   public function jsonBody(): array {
     try {
+      // нельзя использовать "," у последнего параметра
       // Пытаемся декодировать json
       $data = json_decode(
         $this->body,
@@ -115,6 +116,8 @@ class Request {
    */
   public function jsonBodyField(string $field): mixed {
     $data = $this->jsonBody();
+
+
     if (!array_key_exists($field, $data)) {
       throw new HttpException("No such field: $field");
     }

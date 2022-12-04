@@ -8,16 +8,20 @@ use Bassa\Php2\Blog\UUID;
 use Bassa\Php2\Person\Name;
 use PDO;
 use PDOStatement;
+use Psr\Log\LoggerInterface;
 
-class SqliteUsersRepository implements usersRepositoryInterface {
+class SqliteUsersRepository implements UsersRepositoryInterface {
 
-  public function __construct(private PDO $connection) {
+  public function __construct(
+    private PDO $connection,
+    private LoggerInterface $logger
+  ) {
   }
 
   public function save(User $user): void {
     // Добавили поле username в запрос
     $statement = $this->connection->prepare(
-      'INSERT INTO comments (uuid, username, first_name, last_name)
+      'INSERT INTO users (uuid, username, first_name, last_name)
 VALUES (:uuid, :username, :first_name, :last_name)'
     );
     $statement->execute([
@@ -26,6 +30,10 @@ VALUES (:uuid, :username, :first_name, :last_name)'
       ':first_name' => $user->name()->first(),
       ':last_name' => $user->name()->last(),
     ]);
+
+    // Логируем UUID нового Поста
+    $this->logger->info("User created: " . $user->uuid());
+
   }
   // Также добавим метод для получения
   // пользователя по его UUID
@@ -46,6 +54,7 @@ VALUES (:uuid, :username, :first_name, :last_name)'
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     // Бросаем исключение, если пользователь не найден
     if (FALSE === $result) {
+      $this->logger->warning("Не существующий UUID объекта User" . $uuid);
       throw new UserNotFoundException(
         "Cannot get user: $uuid"
       );
